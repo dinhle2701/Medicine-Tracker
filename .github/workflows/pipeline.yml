@@ -22,7 +22,7 @@ jobs:
           java-version: 17
 
       - name: Maven test package
-        runs: mvn clean test
+        run: mvn clean test
 
       - name: Maven clean package
-        runs: mvn clean package
+        run: mvn clean package
