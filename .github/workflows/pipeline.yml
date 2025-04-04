@@ -9,21 +9,7 @@ on:
         - backend
 
 jobs:
-  # frontend:
-  #   name: Check front-end code
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-      
-  #     - name: Setup NodeJS
-  #       uses: actions/setup-node@v3
-
-  #     - name:
-  #       run 
-
   backend:
-    name: Check back-end code
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,7 +22,7 @@ jobs:
           java-version: 17
 
       - name: Maven test package
-        runs: mvn clean package
+        runs: mvn clean test
 
       - name: Maven clean package
         runs: mvn clean package
