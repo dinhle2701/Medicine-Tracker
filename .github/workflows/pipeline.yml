@@ -22,7 +22,9 @@ jobs:
           java-version: 17
 
       - name: Maven test package
+        working-directory: backend
         run: mvn clean test
 
       - name: Maven clean package
+        working-directory: backend
         run: mvn clean package
