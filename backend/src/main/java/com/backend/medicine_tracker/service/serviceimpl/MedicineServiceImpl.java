@@ -4,7 +4,9 @@ import com.backend.medicine_tracker.dto.request.MedicineReq;
 import com.backend.medicine_tracker.dto.response.MedicineRes;
 import com.backend.medicine_tracker.exception.ResourceNotFoundException;
 import com.backend.medicine_tracker.model.Medicine;
+import com.backend.medicine_tracker.model.User;
 import com.backend.medicine_tracker.repository.MedicineRepository;
+import com.backend.medicine_tracker.repository.UserRepository;
 import com.backend.medicine_tracker.service.MedicineService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,9 @@ import java.util.List;
 public class MedicineServiceImpl implements MedicineService {
     @Autowired
     private MedicineRepository medicineRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -63,6 +68,11 @@ public class MedicineServiceImpl implements MedicineService {
     public MedicineRes createMedicine(MedicineReq medicineReq) {
         try {
             Medicine newMedicine = new Medicine();
+
+            User user = userRepository.findById(medicineReq.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + medicineReq.getUserId()));
+            newMedicine.setUser(user);
+
             newMedicine.setMedicineName(medicineReq.getMedicineName());
             newMedicine.setDosage(medicineReq.getDosage());
             newMedicine.setFrequency(medicineReq.getFrequency());

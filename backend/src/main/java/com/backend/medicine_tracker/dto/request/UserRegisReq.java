@@ -1,10 +1,13 @@
 package com.backend.medicine_tracker.dto.request;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class UserReq {
+@Getter
+@Setter
+public class UserRegisReq {
     private String username;
     private String email;
     private String password;
+    private String confirmPassword;
 }
