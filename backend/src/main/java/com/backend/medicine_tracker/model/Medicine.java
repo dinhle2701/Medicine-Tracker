@@ -24,17 +24,17 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "medicineName")
+    @Column(name = "medicineName", nullable = false)
     @Pattern(regexp = "^[a-zA-Z ]{3,24}$",
             message = "Medicine name must be at least 3 characters long and no contain letters, numbers, dots, underscores, and hyphens.")
     private String medicineName;
 
-    @Column(name = "dosage")
+    @Column(name = "dosage", nullable = false)
     @Min(value = 1, message = "Dosage must be at least 1")
     @Max(value = 7, message = "Dosage must be at most 7")
     private int dosage;
 
-    @Column(name = "frequency")
+    @Column(name = "frequency", nullable = false)
     @Min(value = 1, message = "Frequency must be at least 1")
     @Max(value = 7, message = "Frequency must be at most 7")
     private int frequency;
@@ -49,7 +49,7 @@ public class Medicine {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy' 'HH:mm", timezone = "Asia/Ho_Chi_Minh")
     private Timestamp updateDate = null;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;

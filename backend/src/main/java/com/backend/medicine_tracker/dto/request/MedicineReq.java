@@ -11,5 +11,4 @@ public class MedicineReq {
     private String medicineName;
     private int dosage;
     private int frequency;
-
 }

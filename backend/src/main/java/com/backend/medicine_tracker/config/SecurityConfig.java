@@ -1,9 +1,7 @@
 package com.backend.medicine_tracker.config;
 
 import com.backend.medicine_tracker.service.JwtAuthenticationFilter;
-import com.backend.medicine_tracker.service.JwtTokenUtil;
 import com.backend.medicine_tracker.service.serviceimpl.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -69,9 +69,12 @@ public class MedicineServiceImpl implements MedicineService {
         try {
             Medicine newMedicine = new Medicine();
 
-            User user = userRepository.findById(medicineReq.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + medicineReq.getUserId()));
-            newMedicine.setUser(user);
+            User creatUser = userRepository
+                    .findById(medicineReq.getUserId())
+                    .orElseThrow(
+                            () -> new ResourceNotFoundException("User not found with id: " + medicineReq.getUserId())
+                    );
+            newMedicine.setUser(creatUser);
 
             newMedicine.setMedicineName(medicineReq.getMedicineName());
             newMedicine.setDosage(medicineReq.getDosage());
@@ -90,26 +93,38 @@ public class MedicineServiceImpl implements MedicineService {
         }
     }
 
+    @Transactional
     @Override
     public MedicineRes updateMedicine(int id, MedicineReq updateMedicine) {
         try {
-            Medicine existingMedicine = medicineRepository.findById(id).orElseThrow(
+            Medicine newMedicine = medicineRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Not found medicine has id: " + id));
 
-            existingMedicine.setMedicineName(updateMedicine.getMedicineName());
-            existingMedicine.setDosage(updateMedicine.getDosage());
-            existingMedicine.setFrequency(updateMedicine.getFrequency());
-            existingMedicine.setUpdateDate(Timestamp.valueOf(LocalDateTime.now()));
-            medicineRepository.save(existingMedicine);
+            User updateUser = userRepository
+                    .findById(updateMedicine.getUserId())
+                    .orElseThrow(
+                            () -> new ResourceNotFoundException("User not found with id: " + updateMedicine.getUserId())
+                    );
+            newMedicine.setUser(updateUser);
 
-            MedicineRes medicineRes = modelMapper.map(existingMedicine, MedicineRes.class);
+            newMedicine.setMedicineName(updateMedicine.getMedicineName());
+            newMedicine.setDosage(updateMedicine.getDosage());
+            newMedicine.setFrequency(updateMedicine.getFrequency());
+            newMedicine.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+            newMedicine.setUpdateDate(null);
 
-            log.info("Updated medicine with id: " + id + " successfully!");
+            medicineRepository.save(newMedicine);
+
+            MedicineRes medicineRes = modelMapper.map(newMedicine, MedicineRes.class);
+
+            log.info("Created new medicine successfully!");
             return medicineRes;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Error updating medicine: " + e.getMessage());
+            throw new ResourceNotFoundException("Error creating medicine: " + e.getMessage());
         }
     }
+
+
 
     @Override
     public void deleteMedicine(int id) {
