@@ -19,6 +19,7 @@ jobs:
           node-version: '16' # Hoặc phiên bản phù hợp với React
 
       - name: Install dependencies
+        working-directory: frontend
         run: npm install --legacy-peer-deps
 
       - name: 🔍 Run tests
