@@ -30,9 +30,11 @@ const Login = () => {
                 localStorage.setItem('token', data.token);
                 toast.success('Login Successful!', {
                     position: 'top-right',
-                    autoClose: 3000
+                    autoClose: 2000
                 });
-                navigate('/'); // Hoặc chuyển theo role
+                setTimeout(() => {
+                    navigate('/'); // hoặc theo role
+                }, 2500);
             },
             onError: (error) => {
                 console.error("Login error response:", error.response);
