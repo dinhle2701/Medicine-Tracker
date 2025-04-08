@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Hoặc phiên bản phù hợp với React
+          node-version: '18' # Hoặc phiên bản phù hợp với React
 
       - name: Install dependencies
         working-directory: frontend
@@ -59,7 +59,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+          aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       - name: Create CloudFront invalidation
         run: |
