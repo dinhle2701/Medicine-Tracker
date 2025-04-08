@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Setup SDK 17
+      - name: Setup SDK 21
         uses: actions/setup-java@v3
         with: 
           distribution: "temurin"
