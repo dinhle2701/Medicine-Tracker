@@ -46,6 +46,9 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "isActive")
+    private boolean isActive = true;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Medicine> medicines;
