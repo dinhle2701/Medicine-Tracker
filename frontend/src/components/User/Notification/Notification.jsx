@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { IoMdNotifications } from 'react-icons/io';
@@ -20,12 +21,12 @@ const Notification = () => {
     const userId = getUserId();
 
     // Get notification
-    useEffect(() => {
-        // Gọi API lấy thông báo chưa đọc
+    useEffect(() => {    
+        if (!userId) return;
+    
         axios.get(`${API_PATHS.noti}/noti/user/${userId}`)
             .then(response => {
-                setUnreadNotifications(response.data);  // Lưu thông báo chưa đọc vào state
-                // console.log(response.data)
+                setUnreadNotifications(response.data);
             })
             .catch(error => {
                 console.error("Error fetching notifications", error);
