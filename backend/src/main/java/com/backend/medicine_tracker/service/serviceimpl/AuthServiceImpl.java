@@ -13,6 +13,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,25 +45,30 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public UserRes handleLogin(UserLoginReq userReq) {
-        if(userReq.getEmail() == null || userReq.getPassword() == null){
+
+        if (userReq.getEmail() == null || userReq.getPassword() == null) {
             throw new RuntimeException("Email or password cannot be null");
         }
 
-        var user = userRepository.findByEmail(userReq.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Account not found!"));
+        var user = userRepository.findByEmail(userReq.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found!"));
 
-
-        if(!passwordEncoder.matches(userReq.getPassword(), user.getPassword())){
-            throw new ResourceNotFoundException("Wrong password");
+        if (!passwordEncoder.matches(userReq.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Wrong password");
         }
 
-        var token = jwtTokenUtil.generateToken(user);
+        // Tạo token cho user
+        String token = jwtTokenUtil.generateToken(user);  // Truyền đối tượng User thay vì chỉ email
+        UserRes result = new UserRes();
+        result.setUserId(user.getId());
+        result.setUsername(user.getUsername());
+        result.setEmail(user.getEmail());
+        result.setToken(token);
+        result.setMessage("Login successful");
 
-        UserRes response = new UserRes();
-        response.setEmail(user.getEmail());
-        response.setToken(token);
-
-        return response;
+        return result;
     }
+
 
     @Override
     public UserRes handleRegister(UserRegisReq userReq) {
@@ -90,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Kiểm tra nếu không tìm thấy user với email đó
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         return userOptional.get();  // Trả về user nếu tìm thấy

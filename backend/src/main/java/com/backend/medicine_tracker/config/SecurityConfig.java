@@ -38,10 +38,11 @@ public class SecurityConfig{
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/medicines/**").hasAuthority("USER")
+                        .requestMatchers("/api/v1/medicines/**").permitAll()
+                        .requestMatchers("api/v1/noti/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

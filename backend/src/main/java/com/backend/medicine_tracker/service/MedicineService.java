@@ -11,7 +11,7 @@ import java.util.List;
 public interface MedicineService {
     // Define the methods for the MedicineService interface here
     // For example:
-     List<MedicineRes> getAllMedicines();
+     List<MedicineRes> getAllMedicinesByUserId(Integer userId);
      MedicineRes getMedicineById(int id);
      MedicineRes createMedicine(MedicineReq medicineReq);
      MedicineRes updateMedicine(int id, MedicineReq updateMedicine);

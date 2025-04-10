@@ -14,7 +14,10 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://172.20.64.1:3000") // Replace with your frontend URL
+                .allowedOrigins("http://localhost:3001",
+                        "http://localhost:3000",
+                        "http://172.20.64.1:3000",
+                        "https://d1wkia07jtyfq7.cloudfront.net/") // Replace with your frontend URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

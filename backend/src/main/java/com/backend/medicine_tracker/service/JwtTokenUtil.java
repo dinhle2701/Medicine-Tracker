@@ -42,11 +42,12 @@ public class JwtTokenUtil {
         try {
             JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                     .subject(user.getEmail())
-                    .issuer("Định Lê")
+                    .issuer(user.getUsername())
                     .issueTime(new Date())
-                    .expirationTime(Date.from(Instant.now().plus(24, ChronoUnit.HOURS)))
+                    .expirationTime(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)))
                     .jwtID(UUID.randomUUID().toString())
                     .claim("role", user.getRole())
+                    .claim("userId", user.getId())
                     .build();
 
             Payload payload = new Payload(jwtClaimsSet.toJSONObject());

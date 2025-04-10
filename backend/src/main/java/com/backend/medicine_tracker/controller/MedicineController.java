@@ -19,14 +19,16 @@ public class MedicineController {
     private MedicineService medicineService;
 
     // Get all API
-    @GetMapping("")
-    private ResponseEntity<List<MedicineRes>> getAllMedicines() {
-        List<MedicineRes> medicineResList = medicineService.getAllMedicines();
+    @GetMapping("/user/{userId}")
+    private ResponseEntity<List<MedicineRes>> getAllMedicines(@PathVariable Integer userId) {
+        List<MedicineRes> medicineResList = medicineService.getAllMedicinesByUserId(userId);
         if (medicineResList.isEmpty()) {
             throw new ResourceNotFoundException("No medicines found!");
         }
         return new ResponseEntity<>(medicineResList, HttpStatus.OK);
     }
+
+
 
     @GetMapping("/{id}")
     private ResponseEntity<MedicineRes> getMedicineById(@PathVariable("id") int id) {
@@ -37,14 +39,18 @@ public class MedicineController {
         return new ResponseEntity<>(medicineRes, HttpStatus.OK);
     }
 
-    @PostMapping("")
-    private ResponseEntity<MedicineRes> createMedicine(@RequestBody MedicineReq medicineReq) {
+    @PostMapping("/user/{userId}/create")
+    private ResponseEntity<MedicineRes> createMedicine(
+            // @PathVariable("userId") int userId,
+            @RequestBody MedicineReq medicineReq) {
         MedicineRes createdMedicine = medicineService.createMedicine(medicineReq);
         return new ResponseEntity<>(createdMedicine, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    private ResponseEntity<MedicineRes> updateMedicine(@PathVariable("id") int id, @RequestBody MedicineReq updateMedicine) {
+    @PutMapping("/user/{userId}/update/{id}")
+    private ResponseEntity<MedicineRes> updateMedicine(
+            @PathVariable("id") int id,
+            @RequestBody MedicineReq updateMedicine) {
         MedicineRes updatedMedicine = medicineService.updateMedicine(id, updateMedicine);
         if (updatedMedicine == null) {
             throw new ResourceNotFoundException("Medicine not found with id: " + id);
@@ -52,7 +58,7 @@ public class MedicineController {
         return new ResponseEntity<>(updatedMedicine, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/user/delete/{id}")
     private ResponseEntity<Void> deleteMedicine(@PathVariable("id") int id) {
         medicineService.deleteMedicine(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,21 +32,23 @@ public class MedicineServiceImpl implements MedicineService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<MedicineRes> getAllMedicines() {
+    public List<MedicineRes> getAllMedicinesByUserId(Integer userId) {
         try {
-            log.info("Fetched all medicines successfully!");
-            List<Medicine> medicine = medicineRepository.findAll();
+            log.info("Fetching medicines for user ID: {}", userId);
 
-            List<MedicineRes> responses = new ArrayList<>();
-            for (int i = 0; i < medicine.size(); i++) {
-                MedicineRes medicineRes = modelMapper.map(medicine.get(i), MedicineRes.class);
-                responses.add(medicineRes);
-            }
+            List<Medicine> medicines = medicineRepository.findByUserId(userId);
+
+            List<MedicineRes> responses = medicines.stream()
+                    .map(medicine -> modelMapper.map(medicine, MedicineRes.class))
+                    .collect(Collectors.toList());
+
             return responses;
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching medicines: " + e.getMessage());
+            throw new RuntimeException("Error fetching medicines for user ID " + userId + ": " + e.getMessage());
         }
     }
+
+
 
     @Override
     public MedicineRes getMedicineById(int id) {
@@ -69,12 +71,15 @@ public class MedicineServiceImpl implements MedicineService {
         try {
             Medicine newMedicine = new Medicine();
 
-            User creatUser = userRepository
-                    .findById(medicineReq.getUserId())
-                    .orElseThrow(
-                            () -> new ResourceNotFoundException("User not found with id: " + medicineReq.getUserId())
-                    );
-            newMedicine.setUser(creatUser);
+//            User creatUser = userRepository
+//                    .findById(medicineReq.getUserId())
+//                    .orElseThrow(
+//                            () -> new ResourceNotFoundException("User not found with id: " + medicineReq.getUserId())
+//                    );
+
+            User user = userRepository.findById(medicineReq.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            newMedicine.setUser(user);
 
             newMedicine.setMedicineName(medicineReq.getMedicineName());
             newMedicine.setDosage(medicineReq.getDosage());
