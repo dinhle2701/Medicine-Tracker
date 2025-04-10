@@ -1,7 +1,7 @@
 const API_PATHS = {
-    medicines: "http://44.201.156.129:8888/api/v1",
-    auth: "http://44.201.156.129:8888/api/v1/auth",
-    noti: "http://44.201.156.129:8888/api/v1"
+    medicines: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1",
+    auth: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1",
+    noti: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1"
 };
 
 export default API_PATHS;

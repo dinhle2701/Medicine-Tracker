@@ -33,8 +33,7 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
 
         try {
             const res = await axios.post(`${API_PATHS.medicines}/medicines/user/${userId}/create`, {
-                ...formData,
-                userId
+                ...formData
             });
 
             toast.success('Create Medicine Successful!', {

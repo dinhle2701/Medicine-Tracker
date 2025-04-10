@@ -8,7 +8,7 @@
     color: #1c2020;
 }
 
-.container button{
+.content-wrapper .container button{
     width: 30%;
     background-color: rgb(4, 194, 1);
     border: 0px;
