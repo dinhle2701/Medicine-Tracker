@@ -6,9 +6,9 @@ const Stories = () => {
         <div className='stories bg-white p-5'>
             <Container>
                 <div>
-                    <h2 className='pt-2'>
+                    <h2 className='pt-2 fw-bold'>
                         Happy stories from friends <br />
-                        who became <span className='text-success'>superheroes</span>
+                        who became <span  style={{color: "#10b715"}}>superheroes</span>
                     </h2>
                 </div>
 

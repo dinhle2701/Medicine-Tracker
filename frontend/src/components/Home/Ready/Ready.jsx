@@ -14,13 +14,13 @@ const Ready = () => {
             <div className='w-50 p-5 text-white' style={{ backgroundColor: "#025854d7" }}>
                 <Container className='p-5'>
                     <h2 className='my-5'>Ready to Start?</h2>
-                    <p style={{lineHeight: "2"}}>Join thousands of satisfied practitioner and take <br />
+                    <p className='text-white mb-4' style={{ lineHeight: "2" }}>Join thousands of satisfied practitioner and take <br />
                         your practice to the next level. Your perfect <br />
                         solution to support the entire client journey. <br />
                         All in one app.</p>
-                        <Button variant='success' style={{backgroundColor: "green"}}>
-                            Take CPD Course
-                        </Button>
+                    <Button variant='success' style={{ backgroundColor: "rgb(4, 194, 1)" }}>
+                        Take CPD Course
+                    </Button>
                 </Container>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Container, Form, FormControl, Image, Button, Dropdown } from 'react-bootstrap';
-import { useUser } from '../../../context/UserContext'; // path đúng
+import { useUser } from '../../../context/UserContext'; 
 import './CustomNavbar.css';
 import Notification from '../Notification/Notification';
 
@@ -74,7 +74,7 @@ const CustomNavbar = () => {
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button variant="success" href="/login">Login</Button>
+            <Button variant="success" href="/login" style={{background: "rgb(4, 194, 1)", border: "0", width: "40%"}}>Login</Button>
           )}
         </div>
       </Container>

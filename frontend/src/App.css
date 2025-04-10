@@ -5,6 +5,12 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.App Button {
+  width: 30%;
+  background-color: rgb(4, 194, 1);
+  border: 0px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,6 +41,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
