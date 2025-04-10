@@ -8,7 +8,7 @@ const UserDashboard = () => {
         <div className='user_dashboard'>
             <CustomNavbar />
             
-            <div className="p-3 flex-grow-1 w-100">
+            <div className="flex-grow-1 w-100">
                 {/* nội dung sẽ được render ở đây tùy theo route con */}
                 <Outlet />
             </div>

@@ -23,7 +23,7 @@ const CustomNavbar = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg" className="shadow-sm py-2">
+    <Navbar  expand="lg" className="shadow-sm py-2">
       <Container fluid className="d-flex justify-content-between align-items-center mx-5">
         {/* Logo */}
         <Navbar.Brand href="/" className="text-success fw-semibold fs-4">

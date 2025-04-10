@@ -1,11 +1,17 @@
 import React from 'react'
 import Footer from './Footer/Footer'
 import Admission from './Admission/Admission'
+import Stories from './Stories/Stories'
+import Ready from './Ready/Ready'
+import Content from './Content/Content'
 const Home = () => {
   return (
     <div className='home'>
-        <Admission/>
-        <Footer/>
+      <Content />
+      <Admission />
+      <Stories />
+      <Ready />
+      <Footer />
     </div>
   )
 }
