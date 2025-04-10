@@ -122,10 +122,10 @@ public class MedicineServiceImpl implements MedicineService {
 
             MedicineRes medicineRes = modelMapper.map(newMedicine, MedicineRes.class);
 
-            log.info("Created new medicine successfully!");
+            log.info("Update new medicine successfully!");
             return medicineRes;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Error creating medicine: " + e.getMessage());
+            throw new ResourceNotFoundException("Error update medicine: " + e.getMessage());
         }
     }
 

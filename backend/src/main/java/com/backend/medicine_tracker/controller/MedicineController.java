@@ -41,16 +41,19 @@ public class MedicineController {
 
     @PostMapping("/user/{userId}/create")
     private ResponseEntity<MedicineRes> createMedicine(
-            // @PathVariable("userId") int userId,
+             @PathVariable("userId") int userId,
             @RequestBody MedicineReq medicineReq) {
+        medicineReq.setUserId(userId);
         MedicineRes createdMedicine = medicineService.createMedicine(medicineReq);
         return new ResponseEntity<>(createdMedicine, HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{userId}/update/{id}")
     private ResponseEntity<MedicineRes> updateMedicine(
+            @PathVariable("userId") int userId,
             @PathVariable("id") int id,
             @RequestBody MedicineReq updateMedicine) {
+        updateMedicine.setUserId(userId); // nếu cần
         MedicineRes updatedMedicine = medicineService.updateMedicine(id, updateMedicine);
         if (updatedMedicine == null) {
             throw new ResourceNotFoundException("Medicine not found with id: " + id);
