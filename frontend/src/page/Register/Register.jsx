@@ -30,17 +30,17 @@ const Register = () => {
                 console.log("Login success response:", data);
                 toast.success('Login Successful!', {
                     position: 'top-right',
-                    autoClose: 2000
+                    autoClose: 1000
                 });
                 setTimeout(() => {
-                    navigate('/'); // hoặc theo role
-                }, 2500);
+                    navigate('/login'); // hoặc theo role
+                }, 2000);
             },
             onError: (error) => {
                 console.error("Login error response:", error.response);
                 toast.error(error.response?.data?.message || 'Login failed!', {
                     position: 'top-right',
-                    autoClose: 3000
+                    autoClose: 2000
                 });
             }
         });
@@ -87,12 +87,11 @@ const Register = () => {
                                 </Form.Group>
 
                                 <Form.Group className='mb-3 text-center'>
-                                    <Button className='w-50' type='submit'>Register</Button>
+                                    <Button variant='success' className='w-50' type='submit'>Register</Button>
                                 </Form.Group>
 
                                 <Form.Group className='mb-3 text-center'>
-                                    <span className='ms-3'>Forgot password?
-                                        <a href="/login">Login</a> </span>
+                                    <span className='ms-3'>Have an account? <a className=' text-success' href="/login">Login</a> </span>
                                 </Form.Group>
                             </Form>
                         </div>

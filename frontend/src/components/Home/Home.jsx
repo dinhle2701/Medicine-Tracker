@@ -1,11 +1,11 @@
 import React from 'react'
-
+import Footer from './Footer/Footer'
+import Admission from './Admission/Admission'
 const Home = () => {
   return (
     <div className='home'>
-      <h1>Hi, Home</h1>
-      <a href="/login">Login</a> <br />
-      <a href="/register">Register</a>
+        <Admission/>
+        <Footer/>
     </div>
   )
 }
