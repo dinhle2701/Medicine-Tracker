@@ -38,7 +38,12 @@
    git remote add origin https://github.com/dinhle2701/Medicine-Tracker.git
    git branch -M backend
    git pull https://github.com/dinhle2701/Medicine-Tracker.git backend
-- Khởi động dự án:
+- Khởi động dự án: 
+   - Link backend: http://localhost:8888
+   - Link api:
+     - medicine: http://localhost:8888/api/v1/medicines
+     - auth: http://localhost:8888/api/v1/auth
+     - noti: http://localhost:8888/api/v1/noti 
    - Sau khi clone dự án về sẽ thấy cấu trúc như sau: 
 ![image](https://github.com/user-attachments/assets/2598306c-1f42-4567-94e9-f5fe788eb6c2)
    - Nhấp phải chuột vào thư mục `backend` -> chọn `Open Folder as Intellij IDEA Project` 
