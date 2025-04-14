@@ -11,14 +11,18 @@
    git pull https://github.com/dinhle2701/Medicine-Tracker.git frontend
 - Khởi động dự án:
    - Sau khi clone dự án về sẽ thấy cấu trúc như sau: 
-![image](https://github.com/user-attachments/assets/fc62d23d-4e71-4a30-a89e-49c52042fa34)
-- Nhấp phải chuột vào thư mục `frontend` -> chọn `Open with Code`
-![image](https://github.com/user-attachments/assets/6b712bc8-3673-4ec8-ad50-7cbc4a4925c8)
+![image](https://github.com/user-attachments/assets/72635cd3-e910-41c3-b26a-b5c65bb8928d)
+
+   - Nhấp phải chuột vào thư mục `frontend` -> chọn `Open with Code`
+![image](https://github.com/user-attachments/assets/1cc5998d-5626-410b-936f-090ab28ac8e1)
    - Tiếp theo mở Terminal:
    ```
    npm install
    npm start
    ``` 
+
+   - `Link deploy`: https://d1wkia07jtyfq7.cloudfront.net/
+   - `Link local`: http://localhost:3000
 
 
 <h2 align="left">Medicine Dose Tracker Back-End</h2>
@@ -39,14 +43,18 @@
    git branch -M backend
    git pull https://github.com/dinhle2701/Medicine-Tracker.git backend
 - Khởi động dự án: 
-   - Link backend: http://localhost:8888
-   - Link api:
+   - `Link local`: http://localhost:8888
+   - `Link api local`:
      - medicine: http://localhost:8888/api/v1/medicines
      - auth: http://localhost:8888/api/v1/auth
      - noti: http://localhost:8888/api/v1/noti 
+   - `Link deploy`: 
+      - medicines: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1/medicines",
+      - auth: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1/auth",
+      - noti: "https://h8lafaqr65.execute-api.us-east-1.amazonaws.com/prod/api/v1/noti"
    - Sau khi clone dự án về sẽ thấy cấu trúc như sau: 
-![image](https://github.com/user-attachments/assets/2598306c-1f42-4567-94e9-f5fe788eb6c2)
+![image](https://github.com/user-attachments/assets/72635cd3-e910-41c3-b26a-b5c65bb8928d)
    - Nhấp phải chuột vào thư mục `backend` -> chọn `Open Folder as Intellij IDEA Project` 
-![image](https://github.com/user-attachments/assets/e4fbde14-4e37-4425-b4d1-2191294ba2ea)
+![image](https://github.com/user-attachments/assets/01e5c9e1-0a03-4be2-83b1-e84320b98c01)
    - Khởi tạo dự án, nhấn chọn nút `Run MedicineTrackerApplication`:
 ![image](https://github.com/user-attachments/assets/b54afaad-1b13-4340-a704-3dbe03823fe6)
