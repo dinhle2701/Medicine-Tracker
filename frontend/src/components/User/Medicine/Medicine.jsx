@@ -116,8 +116,8 @@ function Medicine() {
                                 <tr key={item.id || index}>
                                     <td>{index + 1}</td>
                                     <td>{item.medicineName}</td>
-                                    <td>{item.dosage}</td>
-                                    <td>{item.frequency}</td>
+                                    <td>{item.dosage} mg</td>
+                                    <td>{item.frequency} times/day</td>
                                     <td className="d-flex justify-content-evenly align-items-center">
                                         <Button
                                             className="d-flex align-items-center"
