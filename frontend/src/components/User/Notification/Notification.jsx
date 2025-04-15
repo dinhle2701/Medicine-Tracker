@@ -6,6 +6,7 @@ import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
 import API_PATHS from '../../../constant/apiPath';
 import { jwtDecode } from "jwt-decode"; // nhớ import nếu chưa có
+import './Notification.css'
 
 const Notification = () => {
     const [notifications, setNotifications] = useState([]);
@@ -53,12 +54,13 @@ const Notification = () => {
 
 
     return (
-        <div>
+        <div className='notification'>
             <IoMdNotifications
                 style={{ width: "25px", height: "25px" }}
                 className="me-4"
                 onClick={handleBellClick}
             />
+            <span>{unreadNotifications.length || 0}</span>
 
             {/* Modal hiển thị thông báo chưa đọc */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>

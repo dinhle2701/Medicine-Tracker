@@ -91,7 +91,7 @@ function Medicine() {
 
 
     return (
-        <div className="medicines bg-white m-3 p-4">
+        <div className="medicines m-3 p-4">
             <Container className="w-100">
                 <div className="d-flex justify-content-between align-items-center">
                     <h1 className="mb-4">Medicines</h1>
@@ -99,14 +99,14 @@ function Medicine() {
                         <MdAddToPhotos className="me-2" /> Add New
                     </Button>
                 </div>
-                <Table striped hover>
+                <Table  hover>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Medicine Name</th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Action</th>
+                            <th className="bg-light ">ID</th>
+                            <th className="bg-light">Medicine Name</th>
+                            <th className="bg-light">Dosage</th>
+                            <th className="bg-light">Frequency</th>
+                            <th className="bg-light">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -118,9 +118,9 @@ function Medicine() {
                                     <td>{item.medicineName}</td>
                                     <td>{item.dosage} mg</td>
                                     <td>{item.frequency} times/day</td>
-                                    <td className="d-flex justify-content-evenly align-items-center">
+                                    <td className="d-flex justify-content-center align-items-center">
                                         <Button
-                                            className="d-flex align-items-center"
+                                            className="d-flex align-items-center me-3"
                                             variant="secondary"
                                             onClick={() => handleOpenUpdateModal(item.id)}>
                                             <FaPencilAlt className="me-2" /> Update
