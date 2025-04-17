@@ -36,23 +36,30 @@ public class GlobalException {
 
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ExceptionResponse> handleConstraintViolation(ConstraintViolationException ex) {
-        StringBuilder messageBuilder = new StringBuilder("Validation failed: ");
+    public ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            messageBuilder.append(violation.getPropertyPath())
-                    .append(" ")
-                    .append(violation.getMessage())
-                    .append("; ");
+            String fieldName = violation.getPropertyPath().toString();
+            String message = violation.getMessage();
+
+            errors.put(fieldName, message); // Nếu 1 field có nhiều lỗi, bạn có thể xử lý thành List<String>
         }
-        return buildErrorResponse(messageBuilder.toString(), HttpStatus.BAD_REQUEST);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         StringBuilder messageBuilder = new StringBuilder("Validation failed: ");
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             messageBuilder.append(error.getField())
-                    .append(" ")
                     .append(error.getDefaultMessage())
                     .append("; ");
         }

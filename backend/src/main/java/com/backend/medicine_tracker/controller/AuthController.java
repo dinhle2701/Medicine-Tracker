@@ -81,7 +81,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserRes> register(@RequestBody UserRegisReq userReq) {
+    public ResponseEntity<UserRes> register(@RequestBody @Valid UserRegisReq userReq) {
         UserRes userRes = authService.handleRegister(userReq);
         return ResponseEntity.ok(userRes);
     }

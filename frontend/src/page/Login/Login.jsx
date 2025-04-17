@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from '../../context/UserContext'; // đúng path tới UserContext
+import { IoIosEye } from "react-icons/io";
+import { IoIosEyeOff } from "react-icons/io";
 
 
 const Login = () => {
@@ -17,6 +19,11 @@ const Login = () => {
         email: '',
         password: '',
     });
+    const [formErrors, setFormErrors] = useState({
+        email: '',
+        password: ''
+    });
+
 
     const loginMutation = useLogin();
 
@@ -29,15 +36,38 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
+
+        // Reset lỗi cũ
+        setFormErrors({
+            email: '',
+            password: ''
+        });
+
+        // Validate form phía client
+        let hasError = false;
+        const newErrors = {};
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+            hasError = true;
+        }
+
+        if (!formData.password.trim()) {
+            newErrors.password = "Password is required";
+            hasError = true;
+        }
+
+        if (hasError) {
+            setFormErrors(newErrors);
+            return;
+        }
+
+        // Nếu không có lỗi -> gọi API
         loginMutation.mutate(formData, {
             onSuccess: (data) => {
-                // console.log("Login success response:", data);
                 localStorage.setItem('token', data.token);
-
-                // Giải mã token để lấy role
                 const decodedToken = jwtDecode(data.token);
                 const role = decodedToken.role;
-
                 setUser(decodedToken);
 
                 toast.success('Login Successful!', {
@@ -45,34 +75,41 @@ const Login = () => {
                     autoClose: 500
                 });
 
-                // Điều hướng theo role
                 setTimeout(() => {
                     if (role === 'ADMIN') {
-                        navigate('/admin'); // điều hướng đến trang admin
+                        navigate('/admin');
                     } else if (role === 'USER') {
-                        navigate('/'); // điều hướng đến trang user
+                        navigate('/');
                     } else {
-                        navigate('/user'); // fallback nếu không rõ role
+                        navigate('/user');
                     }
                 }, 1500);
             },
             onError: (error) => {
                 const errorMessage = error.response?.data?.message || "Something went wrong";
-            
-                if (error.response?.status === 404 || error.response?.status === 401) {
-                    toast.error(errorMessage, { autoClose: 1500 });
+                setFormErrors({ email: '', password: '' });
+
+                const msg = errorMessage.toLowerCase();
+                if (error.response?.status === 401 || error.response?.status === 404) {
+                    if (msg.includes('email') || msg.includes('tài khoản')) {
+                        setFormErrors(prev => ({ ...prev, email: errorMessage }));
+                    } else if (msg.includes('password') || msg.includes('mật khẩu')) {
+                        setFormErrors(prev => ({ ...prev, password: errorMessage }));
+                    } else {
+                        setFormErrors(prev => ({ ...prev, email: errorMessage }));
+                    }
                 } else {
                     toast.error("Unexpected error", { autoClose: 1500 });
                 }
-            
-                // console.log("Status:", error.response?.status);
-                // console.log("Message:", errorMessage);
             }
-            
-            
-            
-            
         });
+    };
+
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
 
@@ -90,22 +127,42 @@ const Login = () => {
                                     <Form.Control
                                         type="email"
                                         name="email"
+                                        placeholder="abc@gmail.com"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        required
+                                        isInvalid={!!formErrors.email}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formErrors.email}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group className="mb-4">
                                     <Form.Label className="fw-bold">Password</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                                    <div className="input-group">
+                                        <Form.Control
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            placeholder="Dinh@1234"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            isInvalid={!!formErrors.password}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            onClick={toggleShowPassword}
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
+                                        </button>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.password}
+                                        </Form.Control.Feedback>
+                                    </div>
                                 </Form.Group>
+
+
 
                                 <Form.Group className="mb-3 text-center">
                                     <Button variant='success' className="w-50" type="submit" disabled={loginMutation.isLoading}>

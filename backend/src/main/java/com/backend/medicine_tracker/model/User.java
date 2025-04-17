@@ -35,8 +35,8 @@ public class User {
     private String email;
 
     @Column(name = "password")
-//    @Pattern(regexp = "^[A-Z]{1}+\\.*[a-zA-Z0-9\\W]{7,16}$",
-//            message = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.")
+//    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d!@#$%^&*_]{8,16}$", message = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
+//    )
     private String password;
 
     @Column(name = "createDate")

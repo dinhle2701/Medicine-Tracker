@@ -5,6 +5,8 @@ import { useRegister } from '../../query/auth'; // Hook gọi API
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../Form.css'
+import { IoIosEye } from "react-icons/io";
+import { IoIosEyeOff } from "react-icons/io";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -13,6 +15,16 @@ const Register = () => {
         password: '',
         username: ''
     });
+    const [formErrors, setFormErrors] = useState({
+        username: '',
+        email: '',
+        password: ''
+    });
+    const [showPassword, setShowPassword] = useState(false);
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     const loginMutation = useRegister();
 
@@ -25,26 +37,65 @@ const Register = () => {
 
     const handleSignup = (e) => {
         e.preventDefault();
+
+        // Reset lỗi cũ
+        setFormErrors({
+            username: '',
+            email: '',
+            password: ''
+        });
+
+        // Kiểm tra dữ liệu rỗng
+        const newErrors = {};
+        let isValid = true;
+
+        if (!formData.username.trim()) {
+            newErrors.username = 'Please insert username';
+            isValid = false;
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Please insert email';
+            isValid = false;
+        }
+
+        if (!formData.password.trim()) {
+            newErrors.password = 'Please insert password';
+            isValid = false;
+        }
+
+        // Nếu có lỗi thì hiển thị
+        if (!isValid) {
+            setFormErrors(newErrors);
+            return;
+        }
+
+        // Gửi API nếu hợp lệ
         loginMutation.mutate(formData, {
             onSuccess: (data) => {
-                console.log("Login success response:", data);
-                toast.success('Login Successful!', {
+                toast.success('Register successfully!', {
                     position: 'top-right',
-                    autoClose: 1000
+                    autoClose: 1500
                 });
                 setTimeout(() => {
-                    navigate('/login'); // hoặc theo role
+                    navigate('/login');
                 }, 2000);
             },
             onError: (error) => {
-                console.error("Login error response:", error.response);
-                toast.error(error.response?.data?.message || 'Login failed!', {
-                    position: 'top-right',
-                    autoClose: 2000
-                });
+                const msg = error.response?.data?.message || "Register failed!";
+                if (msg.toLowerCase().includes("email")) {
+                    setFormErrors(prev => ({ ...prev, email: msg }));
+                } else if (msg.toLowerCase().includes("username")) {
+                    setFormErrors(prev => ({ ...prev, username: msg }));
+                } else if (msg.toLowerCase().includes("password")) {
+                    setFormErrors(prev => ({ ...prev, password: msg }));
+                } else {
+                    toast.error(msg, { autoClose: 2000 });
+                }
             }
         });
     };
+
 
     return (
         <div className="signup">
@@ -62,28 +113,48 @@ const Register = () => {
                                     <Form.Control
                                         type='text'
                                         name='username'
+                                        placeholder="Le Tat Dinh"
                                         value={formData.username}
                                         onChange={handleChange}
-                                        required />
+                                    />
+                                    {formErrors.username && <Form.Text className="text-danger">{formErrors.username}</Form.Text>}
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
                                     <Form.Label className='fw-bold'>Email</Form.Label>
                                     <Form.Control
                                         type='text'
                                         name='email'
+                                        placeholder="abc@gmail.com"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        required />
+                                    />
+                                    {formErrors.email && <Form.Text className="text-danger">{formErrors.email}</Form.Text>}
+
                                 </Form.Group>
 
-                                <Form.Group className='mb-4'>
-                                    <Form.Label className='fw-bold'>Password</Form.Label>
-                                    <Form.Control
-                                        type='password'
-                                        name='password'
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required />
+                                <Form.Group className="mb-4">
+                                    <Form.Label className="fw-bold">Password</Form.Label>
+                                    <div className="input-group">
+                                        <Form.Control
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            placeholder="Dinh@1234"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            isInvalid={!!formErrors.password}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            onClick={toggleShowPassword}
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
+                                        </button>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formErrors.password}
+                                        </Form.Control.Feedback>
+                                    </div>
                                 </Form.Group>
 
                                 <Form.Group className='mb-3 text-center'>
