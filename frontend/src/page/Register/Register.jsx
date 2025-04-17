@@ -82,17 +82,19 @@ const Register = () => {
                 }, 2000);
             },
             onError: (error) => {
-                const msg = error.response?.data?.message || "Register failed!";
-                if (msg.toLowerCase().includes("email")) {
-                    setFormErrors(prev => ({ ...prev, email: msg }));
-                } else if (msg.toLowerCase().includes("username")) {
-                    setFormErrors(prev => ({ ...prev, username: msg }));
-                } else if (msg.toLowerCase().includes("password")) {
-                    setFormErrors(prev => ({ ...prev, password: msg }));
+                const fieldErrors = error.response?.data?.errors;
+            
+                if (fieldErrors) {
+                    setFormErrors(prev => ({
+                        ...prev,
+                        ...fieldErrors
+                    }));
                 } else {
+                    const msg = error.response?.data?.message || "Register failed!";
                     toast.error(msg, { autoClose: 2000 });
                 }
             }
+            
         });
     };
 
