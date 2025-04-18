@@ -45,10 +45,18 @@ const Login = () => {
 
         // Validate form phía client
         let hasError = false;
-        const newErrors = {};
+        const newErrors = {
+            email: "",
+            password: "",
+        };
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
+            hasError = true;
+        } else if (!emailRegex.test(formData.email)) {
+            newErrors.email = "Email format is invalid";
             hasError = true;
         }
 
@@ -125,13 +133,14 @@ const Login = () => {
                                 <Form.Group className="mb-3">
                                     <Form.Label className="fw-bold">Email</Form.Label>
                                     <Form.Control
-                                        type="email"
+                                        type="text"
                                         name="email"
                                         placeholder="abc@gmail.com"
                                         value={formData.email}
                                         onChange={handleChange}
                                         isInvalid={!!formErrors.email}
                                     />
+
                                     <Form.Control.Feedback type="invalid">
                                         {formErrors.email}
                                     </Form.Control.Feedback>
