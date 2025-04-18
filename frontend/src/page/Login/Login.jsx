@@ -33,6 +33,8 @@ const Login = () => {
             [e.target.name]: e.target.value,
         });
     };
+    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*_]{8,16}$/;
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -44,28 +46,29 @@ const Login = () => {
         });
 
         // Validate form phía client
-        let hasError = false;
-        const newErrors = {
-            email: "",
-            password: "",
-        };
+        const newErrors = {};
+        let isValid = true;
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+        // Kiểm tra email
         if (!formData.email.trim()) {
-            newErrors.email = "Email is required";
-            hasError = true;
+            newErrors.email = 'Please insert email';
+            isValid = false;
         } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = "Email format is invalid";
-            hasError = true;
+            newErrors.email = "Invalid email format. Email must be like 'abc@gmail.com'";
+            isValid = false;
         }
 
+        // Kiểm tra password
         if (!formData.password.trim()) {
-            newErrors.password = "Password is required";
-            hasError = true;
+            newErrors.password = 'Please insert password';
+            isValid = false;
+        }
+        else if (!passwordRegex.test(formData.password)) {
+            newErrors.password = 'Password must be 8-16 characters with uppercase, lowercase, and number.';
+            isValid = false;
         }
 
-        if (hasError) {
+        if (!isValid) {
             setFormErrors(newErrors);
             return;
         }
@@ -152,7 +155,7 @@ const Login = () => {
                                         <Form.Control
                                             type={showPassword ? "text" : "password"}
                                             name="password"
-                                            placeholder="Dinh@1234"
+                                            placeholder="Enter your password"
                                             value={formData.password}
                                             onChange={handleChange}
                                             isInvalid={!!formErrors.password}

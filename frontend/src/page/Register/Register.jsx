@@ -35,36 +35,51 @@ const Register = () => {
         });
     };
 
+    // Regex giống với backend
+    const usernameRegex = /^[a-zA-Z ]{3,24}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*_]{8,16}$/;
+
     const handleSignup = (e) => {
         e.preventDefault();
 
-        // Reset lỗi cũ
         setFormErrors({
             username: '',
             email: '',
             password: ''
         });
 
-        // Kiểm tra dữ liệu rỗng
         const newErrors = {};
         let isValid = true;
 
+        // Kiểm tra username
         if (!formData.username.trim()) {
             newErrors.username = 'Please insert username';
             isValid = false;
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Please insert email';
+        } else if (!usernameRegex.test(formData.username)) {
+            newErrors.username = 'Username must be 3-24 letters long and only contain letters and spaces.';
             isValid = false;
         }
 
+        // Kiểm tra email
+        if (!formData.email.trim()) {
+            newErrors.email = 'Please insert email';
+            isValid = false;
+        } else if (!emailRegex.test(formData.email)) {
+            newErrors.email = "Invalid email format. Email must be like 'abc@gmail.com'";
+            isValid = false;
+        }
+
+        // Kiểm tra password
         if (!formData.password.trim()) {
             newErrors.password = 'Please insert password';
             isValid = false;
         }
+        else if (!passwordRegex.test(formData.password)) {
+            newErrors.password = 'Password must be 8-16 characters with uppercase, lowercase, and number.';
+            isValid = false;
+        }
 
-        // Nếu có lỗi thì hiển thị
         if (!isValid) {
             setFormErrors(newErrors);
             return;
@@ -83,7 +98,6 @@ const Register = () => {
             },
             onError: (error) => {
                 const fieldErrors = error.response?.data?.errors;
-            
                 if (fieldErrors) {
                     setFormErrors(prev => ({
                         ...prev,
@@ -94,9 +108,9 @@ const Register = () => {
                     toast.error(msg, { autoClose: 2000 });
                 }
             }
-            
         });
     };
+
 
 
     return (
@@ -115,7 +129,7 @@ const Register = () => {
                                     <Form.Control
                                         type='text'
                                         name='username'
-                                        placeholder="Le Tat Dinh"
+                                        placeholder="Enter your name"
                                         value={formData.username}
                                         onChange={handleChange}
                                     />
@@ -140,7 +154,7 @@ const Register = () => {
                                         <Form.Control
                                             type={showPassword ? "text" : "password"}
                                             name="password"
-                                            placeholder="Dinh@1234"
+                                            placeholder="Enter your password"
                                             value={formData.password}
                                             onChange={handleChange}
                                             isInvalid={!!formErrors.password}
@@ -153,9 +167,7 @@ const Register = () => {
                                         >
                                             {showPassword ? <IoIosEyeOff /> : <IoIosEye />}
                                         </button>
-                                        <Form.Control.Feedback type="invalid">
-                                            {formErrors.password}
-                                        </Form.Control.Feedback>
+                                        <Form.Control.Feedback type="invalid">{formErrors.password}</Form.Control.Feedback>
                                     </div>
                                 </Form.Group>
 
