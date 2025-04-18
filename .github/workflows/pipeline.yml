@@ -91,7 +91,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PEM_KEY_B64 }}
-          source: backend/target/medicine-tracker-0.0.1-SNAPSHOT.jar
+          source: medicine-tracker-0.0.1-SNAPSHOT.jar
           target: /home/ubuntu/
 
       - name: SSH to EC2 and deploy
@@ -102,5 +102,5 @@ jobs:
           key: ${{ secrets.EC2_PEM_KEY_B64 }}
           script: |
             sudo mv /home/ubuntu/medicine-tracker-0.0.1-SNAPSHOT.jar /root/
-            pkill -f 'java -jar' || true
-            nohup java -jar /root/medicine-tracker-0.0.1-SNAPSHOT.jar > /root/log.txt 2>&1 &
+            # pkill -f 'java -jar' || true
+            # nohup java -jar /root/medicine-tracker-0.0.1-SNAPSHOT.jar > /root/log.txt 2>&1 &
