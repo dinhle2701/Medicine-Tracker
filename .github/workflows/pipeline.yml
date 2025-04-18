@@ -67,6 +67,9 @@ jobs:
 
   backend-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     needs: frontend-deploy
     steps:
       - name: Checkout repository
@@ -78,24 +81,11 @@ jobs:
           distribution: "temurin"
           java-version: 21
 
-      - name: Maven test package
+      - name: Maven test & clean package
         working-directory: backend
-        run: mvn clean package -DskipTests
+        run: mvn clean package -DskipTests     
 
-      - name: Maven clean package
-        working-directory: backend
-        run: mvn clean package        
-
-      - name: Deploy to EC2
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PEM_KEY_B64 }}
-          source: backend/target/*.jar
-          target: ~/app/
-
-     - name: Copy jar to EC2 via SCP
+      - name: Copy jar to EC2 via SCP
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.EC2_HOST }}
