@@ -1,15 +1,19 @@
 /* eslint-disable no-unused-vars */
-import React from 'react'
-import { useState, useEffect } from 'react';
-import { Form, Modal, Button } from 'react-bootstrap'
-import { jwtDecode } from "jwt-decode"; // nhớ import nếu chưa có
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { Form, Modal, Button } from 'react-bootstrap';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import API_PATHS from "../../../../constant/apiPath";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
     const [formData, setFormData] = useState({
+        medicineName: '',
+        dosage: '',
+        frequency: ''
+    });
+    const [errors, setErrors] = useState({
         medicineName: '',
         dosage: '',
         frequency: ''
@@ -26,8 +30,45 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Regex validation for the fields
+    const validateFormData = () => {
+        const { medicineName, dosage, frequency } = formData;
+        let formErrors = {
+            medicineName: '',
+            dosage: '',
+            frequency: ''
+        };
+
+        // Validate medicineName (should be 3-16 chars and start with an uppercase letter)
+        const medicineNameRegex = /^[A-Z][a-zA-Z]{2,15}$/;
+        if (!medicineNameRegex.test(medicineName)) {
+            formErrors.medicineName = 'Medicine name should be 3-16 characters long and start with an uppercase letter.';
+        }
+
+        // Validate dosage (should be a number <= 1000)
+        const dosageRegex = /^[0-9]{1,3}$/;
+        if (!dosageRegex.test(dosage) || parseInt(dosage) > 1000) {
+            formErrors.dosage = 'Dosage should be a number and less than or equal to 1000.';
+        }
+
+        // Validate frequency (should be a number < 7)
+        const frequencyRegex = /^[0-6]$/;
+        if (!frequencyRegex.test(frequency)) {
+            formErrors.frequency = 'Frequency should be a number and less than 7.';
+        }
+
+        setErrors(formErrors);
+
+        // Return false if there are any errors
+        return !Object.values(formErrors).some(error => error !== '');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate form data before submitting
+        if (!validateFormData()) return;
+
         const userId = getUserId();
         if (!userId) return alert("User not found in token!");
 
@@ -41,16 +82,15 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                 autoClose: 2500
             });
             onCreated(res.data); // reload list
-            handleClose(); // không cần truyền true nếu onClose không nhận tham số
+            handleClose(); // close modal
         } catch (err) {
-            // console.error(err);
-            // alert("Thêm thất bại!");
             toast.error('Create Medicine Failed!', {
                 position: 'top-right',
                 autoClose: 2500
             });
         }
     };
+
     useEffect(() => {
         if (!show) {
             setFormData({
@@ -58,10 +98,13 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                 dosage: '',
                 frequency: ''
             });
+            setErrors({
+                medicineName: '',
+                dosage: '',
+                frequency: ''
+            });
         }
     }, [show]);
-
-
 
     return (
         <Modal
@@ -70,6 +113,11 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
             animation={true}
             onExited={() => {
                 setFormData({
+                    medicineName: '',
+                    dosage: '',
+                    frequency: ''
+                });
+                setErrors({
                     medicineName: '',
                     dosage: '',
                     frequency: ''
@@ -88,8 +136,11 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                             name="medicineName"
                             value={formData.medicineName}
                             onChange={handleChange}
-                            required
+                            isInvalid={!!errors.medicineName}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.medicineName}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
@@ -99,8 +150,11 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                             name="dosage"
                             value={formData.dosage}
                             onChange={handleChange}
-                            required
+                            isInvalid={!!errors.dosage}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.dosage}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
@@ -110,8 +164,11 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                             name="frequency"
                             value={formData.frequency}
                             onChange={handleChange}
-                            required
+                            isInvalid={!!errors.frequency}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.frequency}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <div className="text-end">
@@ -128,5 +185,4 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
     );
 };
 
-
-export default CreateMedicineModal
+export default CreateMedicineModal;

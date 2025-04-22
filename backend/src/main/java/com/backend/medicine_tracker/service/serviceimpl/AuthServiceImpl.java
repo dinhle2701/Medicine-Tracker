@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(userReq.getUsername());
         user.setEmail(userReq.getEmail());
         user.setPassword(passwordEncoder.encode(userReq.getPassword()));
-        user.setRole("USER");
+        user.setRole("user");
 
         userRepository.save(user);
 

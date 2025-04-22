@@ -30,8 +30,8 @@ public class Medicine {
     private String medicineName;
 
     @Column(name = "dosage", nullable = false)
-    @Min(value = 1, message = "Dosage must be at least 1")
-    @Max(value = 7, message = "Dosage must be at most 7")
+    @Min(value = 50, message = "Dosage must be at least 1")
+    @Max(value = 1000, message = "Dosage must be at most 7")
     private int dosage;
 
     @Column(name = "frequency", nullable = false)

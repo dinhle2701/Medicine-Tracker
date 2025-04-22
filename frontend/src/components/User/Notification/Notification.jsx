@@ -7,6 +7,7 @@ import axios from 'axios';
 import API_PATHS from '../../../constant/apiPath';
 import { jwtDecode } from "jwt-decode"; // nhớ import nếu chưa có
 import './Notification.css'
+import '../../Custom/hover.css'
 
 const Notification = () => {
     const [notifications, setNotifications] = useState([]);
@@ -57,7 +58,7 @@ const Notification = () => {
         <div className='notification'>
             <IoMdNotifications
                 style={{ width: "25px", height: "25px" }}
-                className="me-4"
+                className="me-4 zoom-hover"
                 onClick={handleBellClick}
             />
             <span>{unreadNotifications.length || 0}</span>

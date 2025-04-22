@@ -3,17 +3,15 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // nhớ import nếu chưa có
 import axios from "axios";
 import API_PATHS from "../../../constant/apiPath";
-import { Table, Container, Button } from 'react-bootstrap'
+import { Table, Container, Button, Form } from 'react-bootstrap';
 import { MdAddToPhotos } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
-
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateMedicineModal from './CreateMedicineModal/CreateMedicineModal'; // path tùy vào bạn
 import UpdateMedicineModal from "./UpdateMedicineModal/UpdateMedicineModal";
-
 
 function Medicine() {
     // modal
@@ -38,10 +36,10 @@ function Medicine() {
         setShowUpdateModal(false);
     };
 
-
     const [medicines, setMedicines] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState(""); // New state for search term
 
     useEffect(() => {
         const fetchMedicines = async () => {
@@ -89,6 +87,10 @@ function Medicine() {
         }
     };
 
+    // Filter medicines based on search term
+    const filteredMedicines = medicines.filter((item) =>
+        item.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) // Case-insensitive search
+    );
 
     return (
         <div className="medicines m-3 p-4">
@@ -99,10 +101,20 @@ function Medicine() {
                         <MdAddToPhotos className="me-2" /> Add New
                     </Button>
                 </div>
-                <Table  hover>
+
+                {/* Search input */}
+                <Form.Control
+                    type="text"
+                    placeholder="Search medicines..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+                    className="mb-4"
+                />
+
+                <Table hover>
                     <thead>
                         <tr>
-                            <th className="bg-light ">ID</th>
+                            <th className="bg-light">ID</th>
                             <th className="bg-light">Medicine Name</th>
                             <th className="bg-light">Dosage</th>
                             <th className="bg-light">Frequency</th>
@@ -110,7 +122,7 @@ function Medicine() {
                         </tr>
                     </thead>
                     <tbody>
-                        {medicines
+                        {filteredMedicines
                             .filter(item => item && item.medicineName) // tránh undefined/null
                             .map((item, index) => (
                                 <tr key={item.id || index}>
@@ -130,16 +142,16 @@ function Medicine() {
                                             className="d-flex align-items-center"
                                             variant="warning"
                                             onClick={() => handleDelete(item.id)}
-                                            disabled={deletingId === item.id}
-                                        ><FaDeleteLeft className="me-2" />Delete
+                                            disabled={deletingId === item.id}>
+                                            <FaDeleteLeft className="me-2" />Delete
                                         </Button>
                                     </td>
                                 </tr>
                             ))}
-
                     </tbody>
                 </Table>
             </Container>
+
             <CreateMedicineModal
                 show={showModal}
                 handleClose={setShowModal}
