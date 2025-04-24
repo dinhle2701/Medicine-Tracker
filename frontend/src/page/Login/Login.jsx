@@ -89,7 +89,7 @@ const Login = () => {
                 setTimeout(() => {
                     if (role === 'ADMIN') {
                         navigate('/admin');
-                    } else if (role === 'USER') {
+                    } else if (role === 'user') {
                         navigate('/');
                     } else {
                         navigate('/user');
