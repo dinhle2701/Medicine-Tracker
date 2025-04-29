@@ -74,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
     public UserRes handleRegister(UserRegisReq userReq) {
         User user = new User();
         if(userRepository.existsByUsername(userReq.getEmail())) {
-            throw new RuntimeException("Username already exists");
+            throw new RuntimeException("Email already exists");
         }
 
         user.setUsername(userReq.getUsername());

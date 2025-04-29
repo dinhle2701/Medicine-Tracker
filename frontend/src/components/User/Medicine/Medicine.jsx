@@ -7,11 +7,11 @@ import { Table, Container, Button, Form } from 'react-bootstrap';
 import { MdAddToPhotos } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateMedicineModal from './CreateMedicineModal/CreateMedicineModal'; // path tùy vào bạn
 import UpdateMedicineModal from "./UpdateMedicineModal/UpdateMedicineModal";
+import './Medicine.css'
 
 function Medicine() {
     // modal
@@ -131,28 +131,32 @@ function Medicine() {
                                 .filter(item => item && item.medicineName) // tránh undefined/null
                                 .map((item, index) => (
                                     <tr key={item.id || index}>
-                                        <td>{index + 1}</td>
+                                        <td className="text-wrap">{index + 1}</td>
                                         <td>{item.medicineName}</td>
-                                        <td>{item.dosage} mg</td>
-                                        <td>{item.frequency} times/day</td>
-                                        <td className="d-flex justify-content-center align-items-center">
-                                            <Button
-                                                className="d-flex align-items-center me-3"
-                                                variant="secondary"
-                                                onClick={() => handleOpenUpdateModal(item.id)}
-                                            >
-                                                <FaPencilAlt className="me-2" /> Update
-                                            </Button>
+                                        <td className="text-wrap">{item.dosage} mg</td>
+                                        <td className="nowrap">{item.frequency} times/day</td>
+                                        <td>
+                                            <div className="d-flex justify-content-center align-items-center gap-2 flex-nowrap">
+                                                <Button
+                                                    className="d-flex align-items-center flex-nowrap"
+                                                    variant="secondary"
+                                                    onClick={() => handleOpenUpdateModal(item.id)}
+                                                >
+                                                    <FaPencilAlt className="me-2" /> Update
+                                                </Button>
 
-                                            <Button
-                                                className="d-flex align-items-center"
-                                                variant="warning"
-                                                onClick={() => handleDelete(item.id)}
-                                                disabled={deletingId === item.id}
-                                            >
-                                                <FaDeleteLeft className="me-2" />Delete
-                                            </Button>
+                                                <Button
+                                                    className="d-flex align-items-center flex-nowrap"
+                                                    variant="warning"
+                                                    onClick={() => handleDelete(item.id)}
+                                                    disabled={deletingId === item.id}
+                                                >
+                                                    <FaDeleteLeft className="me-2" /> Delete
+                                                </Button>
+                                            </div>
                                         </td>
+
+
                                     </tr>
                                 ))}
                         </tbody>
