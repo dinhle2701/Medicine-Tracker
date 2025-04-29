@@ -42,7 +42,7 @@ const Register = () => {
             if (!value.trim()) {
                 error = 'Please insert password';
             } else if (!usernameRegex.test(value)) {
-                error = 'Password must be 8-16 characters with uppercase, lowercase.';
+                error = 'Username must be 8-16 characters with uppercase, lowercase.';
             }
         }
 
