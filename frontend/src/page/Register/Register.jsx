@@ -28,17 +28,61 @@ const Register = () => {
 
     const loginMutation = useRegister();
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+
 
     // Regex giống với backend
     const usernameRegex = /^[a-zA-Z ]{3,24}$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*_]{8,16}$/;
+
+    const validateField = (name, value) => {
+        let error = '';
+
+        if (name === 'username') {
+            if (!value.trim()) {
+                error = 'Please insert password';
+            } else if (!usernameRegex.test(value)) {
+                error = 'Password must be 8-16 characters with uppercase, lowercase.';
+            }
+        }
+
+        if (name === 'email') {
+            if (!value.trim()) {
+                error = 'Please insert email';
+            } else if (!emailRegex.test(value)) {
+                error = "Invalid email format. Email must be like 'abc@gmail.com'";
+            }
+        }
+
+        if (name === 'password') {
+            if (!value.trim()) {
+                error = 'Please insert password';
+            } else if (!passwordRegex.test(value)) {
+                error = 'Password must be 8-16 characters with uppercase, lowercase, and number.';
+            }
+        }
+
+        return error;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        // Validate ngay khi nhập
+        const error = validateField(name, value);
+
+        setFormErrors((prev) => ({
+            ...prev,
+            [name]: error,
+        }));
+    };
+    
+
 
     const handleSignup = (e) => {
         e.preventDefault();

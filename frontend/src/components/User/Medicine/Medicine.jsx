@@ -95,9 +95,12 @@ function Medicine() {
     return (
         <div className="medicines m-3 p-4">
             <Container className="w-100">
-                <div className="d-flex justify-content-between align-items-center">
-                    <h1 className="mb-4">Medicines</h1>
-                    <Button className="d-flex align-items-center" onClick={handleOpenModal}>
+                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                    <h1 className="mb-4 col-12 col-sm-6">Medicines</h1>
+                    <Button
+                        className="d-flex align-items-center col-12 col-sm-auto mt-2 mt-sm-0"
+                        onClick={handleOpenModal}
+                    >
                         <MdAddToPhotos className="me-2" /> Add New
                     </Button>
                 </div>
@@ -111,50 +114,55 @@ function Medicine() {
                     className="mb-4"
                 />
 
-                <Table hover>
-                    <thead>
-                        <tr>
-                            <th className="bg-light">ID</th>
-                            <th className="bg-light">Medicine Name</th>
-                            <th className="bg-light">Dosage</th>
-                            <th className="bg-light">Frequency</th>
-                            <th className="bg-light">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredMedicines
-                            .filter(item => item && item.medicineName) // tránh undefined/null
-                            .map((item, index) => (
-                                <tr key={item.id || index}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.medicineName}</td>
-                                    <td>{item.dosage} mg</td>
-                                    <td>{item.frequency} times/day</td>
-                                    <td className="d-flex justify-content-center align-items-center">
-                                        <Button
-                                            className="d-flex align-items-center me-3"
-                                            variant="secondary"
-                                            onClick={() => handleOpenUpdateModal(item.id)}>
-                                            <FaPencilAlt className="me-2" /> Update
-                                        </Button>
+                {/* Table */}
+                <div className="table-responsive">
+                    <Table hover>
+                        <thead>
+                            <tr>
+                                <th className="bg-light">ID</th>
+                                <th className="bg-light">Medicine Name</th>
+                                <th className="bg-light">Dosage</th>
+                                <th className="bg-light">Frequency</th>
+                                <th className="bg-light">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredMedicines
+                                .filter(item => item && item.medicineName) // tránh undefined/null
+                                .map((item, index) => (
+                                    <tr key={item.id || index}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.medicineName}</td>
+                                        <td>{item.dosage} mg</td>
+                                        <td>{item.frequency} times/day</td>
+                                        <td className="d-flex justify-content-center align-items-center">
+                                            <Button
+                                                className="d-flex align-items-center me-3"
+                                                variant="secondary"
+                                                onClick={() => handleOpenUpdateModal(item.id)}
+                                            >
+                                                <FaPencilAlt className="me-2" /> Update
+                                            </Button>
 
-                                        <Button
-                                            className="d-flex align-items-center"
-                                            variant="warning"
-                                            onClick={() => handleDelete(item.id)}
-                                            disabled={deletingId === item.id}>
-                                            <FaDeleteLeft className="me-2" />Delete
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </Table>
+                                            <Button
+                                                className="d-flex align-items-center"
+                                                variant="warning"
+                                                onClick={() => handleDelete(item.id)}
+                                                disabled={deletingId === item.id}
+                                            >
+                                                <FaDeleteLeft className="me-2" />Delete
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </Table>
+                </div>
             </Container>
 
             <CreateMedicineModal
                 show={showModal}
-                handleClose={setShowModal}
+                handleClose={() => setShowModal(false)}
                 onCreated={handleMedicineCreated}
             />
 
@@ -165,6 +173,7 @@ function Medicine() {
                 medicineId={selectedMedicineId}
             />
         </div>
+
     );
 }
 

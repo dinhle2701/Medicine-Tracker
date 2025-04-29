@@ -6,74 +6,84 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from '../../context/UserContext'; // đúng path tới UserContext
-import { IoIosEye } from "react-icons/io";
-import { IoIosEyeOff } from "react-icons/io";
-
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { setUser } = useUser(); // 👈 lấy hàm setUser từ context
-
+    const { setUser } = useUser(); // lấy hàm setUser từ context
 
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+
     const [formErrors, setFormErrors] = useState({
         email: '',
         password: ''
     });
 
-
+    const [showPassword, setShowPassword] = useState(false);
     const loginMutation = useLogin();
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@gmail\.com$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*_]{8,16}$/;
+
+    const validateField = (name, value) => {
+        let error = '';
+
+        if (name === 'email') {
+            if (!value.trim()) {
+                error = 'Please insert email';
+            } else if (!emailRegex.test(value)) {
+                error = "Invalid email format. Email must be like 'abc@gmail.com'";
+            }
+        }
+
+        if (name === 'password') {
+            if (!value.trim()) {
+                error = 'Please insert password';
+            } else if (!passwordRegex.test(value)) {
+                error = 'Password must be 8-16 characters with uppercase, lowercase, and number.';
+            }
+        }
+
+        return error;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        // Validate ngay khi nhập
+        const error = validateField(name, value);
+
+        setFormErrors((prev) => ({
+            ...prev,
+            [name]: error,
+        }));
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
 
-        // Reset lỗi cũ
-        setFormErrors({
-            email: '',
-            password: ''
-        });
+        // Validate toàn bộ form trước khi submit
+        const errors = {
+            email: validateField('email', formData.email),
+            password: validateField('password', formData.password)
+        };
 
-        // Validate form phía client
-        const newErrors = {};
-        let isValid = true;
+        setFormErrors(errors);
 
-        // Kiểm tra email
-        if (!formData.email.trim()) {
-            newErrors.email = 'Please insert email';
-            isValid = false;
-        } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = "Invalid email format. Email must be like 'abc@gmail.com'";
-            isValid = false;
-        }
-
-        // Kiểm tra password
-        if (!formData.password.trim()) {
-            newErrors.password = 'Please insert password';
-            isValid = false;
-        }
-        else if (!passwordRegex.test(formData.password)) {
-            newErrors.password = 'Password must be 8-16 characters with uppercase, lowercase, and number.';
-            isValid = false;
-        }
-
-        if (!isValid) {
-            setFormErrors(newErrors);
+        // Nếu còn lỗi, không submit
+        if (errors.email || errors.password) {
             return;
         }
 
-        // Nếu không có lỗi -> gọi API
+        // Gọi API
         loginMutation.mutate(formData, {
             onSuccess: (data) => {
                 localStorage.setItem('token', data.token);
@@ -98,9 +108,13 @@ const Login = () => {
             },
             onError: (error) => {
                 const errorMessage = error.response?.data?.message || "Something went wrong";
-                setFormErrors({ email: '', password: '' });
-
                 const msg = errorMessage.toLowerCase();
+
+                setFormErrors({
+                    email: '',
+                    password: ''
+                });
+
                 if (error.response?.status === 401 || error.response?.status === 404) {
                     if (msg.includes('email') || msg.includes('tài khoản')) {
                         setFormErrors(prev => ({ ...prev, email: errorMessage }));
@@ -110,19 +124,15 @@ const Login = () => {
                         setFormErrors(prev => ({ ...prev, email: errorMessage }));
                     }
                 } else {
-                    toast.error("Unexpected error", { autoClose: 1500 });
+                    toast.error("Unable Connect to Server", { autoClose: 1500 });
                 }
             }
         });
     };
 
-
-    const [showPassword, setShowPassword] = useState(false);
-
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
 
     return (
         <div className="signin">
@@ -143,7 +153,6 @@ const Login = () => {
                                         onChange={handleChange}
                                         isInvalid={!!formErrors.email}
                                     />
-
                                     <Form.Control.Feedback type="invalid">
                                         {formErrors.email}
                                     </Form.Control.Feedback>
@@ -174,8 +183,6 @@ const Login = () => {
                                     </div>
                                 </Form.Group>
 
-
-
                                 <Form.Group className="mb-3 text-center">
                                     <Button variant='success' className="w-50" type="submit" disabled={loginMutation.isLoading}>
                                         {loginMutation.isLoading ? 'Logging in...' : 'Login'}
@@ -184,7 +191,7 @@ const Login = () => {
 
                                 <Form.Group className="mb-3 text-center">
                                     <span className="ms-3">
-                                        <a href="/register" className=' text-success'>Register</a>
+                                        <a href="/register" className='text-success'>Register</a>
                                     </span>
                                 </Form.Group>
                             </Form>

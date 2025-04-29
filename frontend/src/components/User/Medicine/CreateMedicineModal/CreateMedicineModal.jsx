@@ -26,11 +26,40 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
         return decoded.userId || decoded.sub;
     };
 
+    const medicineNameRegex = /^[A-Z][a-zA-Z]{2,15}$/;
+    const dosageRegex = /^(50|[5-9][0-9]|[1-9][0-9]{2}|1000)$/;
+    const frequencyRegex = /^[0-7]$/;
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData(prevData => ({ ...prevData, [name]: value }));
+
+        let error = '';
+
+        if (name === 'medicineName') {
+            if (!medicineNameRegex.test(value)) {
+                error = 'Medicine name should be 3-16 characters long and start with an uppercase letter.';
+            }
+        }
+
+        if (name === 'dosage') {
+            if (!dosageRegex.test(value)) {
+                error = 'Dosage must be a number between 50 and 1000.';
+            }
+        }
+
+        if (name === 'frequency') {
+            if (!frequencyRegex.test(value)) {
+                error = 'Frequency must be a number between 0 and 7.';
+            }
+        }
+
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: error
+        }));
     };
 
-    // Regex validation for the fields
     const validateFormData = () => {
         const { medicineName, dosage, frequency } = formData;
         let formErrors = {
@@ -39,34 +68,26 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
             frequency: ''
         };
 
-        // Validate medicineName (should be 3-16 chars and start with an uppercase letter)
-        const medicineNameRegex = /^[A-Z][a-zA-Z]{2,15}$/;
         if (!medicineNameRegex.test(medicineName)) {
             formErrors.medicineName = 'Medicine name should be 3-16 characters long and start with an uppercase letter.';
         }
 
-        // Validate dosage (should be a number <= 1000)
-        const dosageRegex = /^[0-9]{1,3}$/;
-        if (!dosageRegex.test(dosage) || parseInt(dosage) > 1000) {
-            formErrors.dosage = 'Dosage should be a number and less than or equal to 1000.';
+        if (!dosageRegex.test(dosage)) {
+            formErrors.dosage = 'Dosage must be a number between 50 and 1000.';
         }
 
-        // Validate frequency (should be a number < 7)
-        const frequencyRegex = /^[0-6]$/;
         if (!frequencyRegex.test(frequency)) {
-            formErrors.frequency = 'Frequency should be a number and less than 7.';
+            formErrors.frequency = 'Frequency must be a number between 0 and 7.';
         }
 
         setErrors(formErrors);
 
-        // Return false if there are any errors
         return !Object.values(formErrors).some(error => error !== '');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate form data before submitting
         if (!validateFormData()) return;
 
         const userId = getUserId();
@@ -90,6 +111,7 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
             });
         }
     };
+
 
     useEffect(() => {
         if (!show) {
@@ -172,7 +194,7 @@ const CreateMedicineModal = ({ show, handleClose, onCreated }) => {
                     </Form.Group>
 
                     <div className="text-end">
-                        <Button variant="secondary" onClick={handleClose} className="me-2">
+                        <Button variant="secondary" onClick={handleClose} className="me-2" closeButton>
                             Cancel
                         </Button>
                         <Button type="submit" variant="success">
