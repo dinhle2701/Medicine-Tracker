@@ -32,7 +32,7 @@ const Register = () => {
 
     // Regex giống với backend
     const usernameRegex = /^[a-zA-Z ]{3,24}$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]{4,}@gmail\.com$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*_]{8,16}$/;
 
     const validateField = (name, value) => {
